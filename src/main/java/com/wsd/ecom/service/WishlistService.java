@@ -2,9 +2,11 @@ package com.wsd.ecom.service;
 
 import com.wsd.ecom.dto.WishlistDto;
 import com.wsd.ecom.repository.WishlistRepository;
+import com.wsd.ecom.util.AppUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,6 +27,7 @@ public class WishlistService {
     }
 
     public Page<WishlistDto> getWishlistForCustomer(Long customerId, Pageable pageable) {
+        pageable = AppUtil.getSortingWithCreationTime(pageable, Sort.Direction.DESC);
         return wishlistRepository.findWishlistByCustomerId(customerId, pageable);
     }
 }

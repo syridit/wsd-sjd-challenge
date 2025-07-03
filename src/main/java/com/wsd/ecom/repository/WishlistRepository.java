@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 public interface WishlistRepository extends BaseRepository<Wishlist> {
 
     @Query("""
-                        select new com.wsd.ecom.dto.WishlistDto(w.customerId, p.name, p.price, p.id) from Wishlist w
+                        select new com.wsd.ecom.dto.WishlistDto(w.customerId, p.name, p.price, p.id, w.createdAt) from Wishlist w
                         inner join Product p on w.productId = p.id
                         where w.customerId = :customerId
             """)

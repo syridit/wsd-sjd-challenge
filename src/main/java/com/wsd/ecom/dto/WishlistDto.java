@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * @author Md. Sadman Yasar Ridit
@@ -23,5 +24,6 @@ public class WishlistDto {
     String productName;
     BigDecimal productPrice;
     Long productId;
+    LocalDateTime createdAt;
 
 }
