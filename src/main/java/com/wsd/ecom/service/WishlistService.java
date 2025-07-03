@@ -1,16 +1,11 @@
 package com.wsd.ecom.service;
 
 import com.wsd.ecom.dto.WishlistDto;
-import com.wsd.ecom.entity.Wishlist;
 import com.wsd.ecom.repository.WishlistRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 /**
  * @author Md. Sadman Yasar Ridit
@@ -30,7 +25,6 @@ public class WishlistService {
     }
 
     public Page<WishlistDto> getWishlistForCustomer(Long customerId, Pageable pageable) {
-        //ToDo implement after unit test
-        return new PageImpl<>(new ArrayList<>());
+        return wishlistRepository.findWishlistByCustomerId(customerId, pageable);
     }
 }

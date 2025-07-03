@@ -1,8 +1,6 @@
 package com.wsd.ecom.service;
 
 import com.wsd.ecom.dto.WishlistDto;
-import com.wsd.ecom.entity.Product;
-import com.wsd.ecom.entity.Wishlist;
 import com.wsd.ecom.repository.WishlistRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +12,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -58,6 +55,20 @@ public class WishlistServiceTest {
         assertFalse(actual.isEmpty());
         assertEquals(expectedWishlist.size(), actual.getNumberOfElements());
         assertEquals(expectedWishlist.getFirst().getCustomerId(), customerId);
+    }
+
+    @Test
+    void shouldReturnNoWishlistForCustomerEmptyResultReturnedFromDb() {
+        // Given
+        when(wishlistRepository.findWishlistByCustomerId(anyLong(), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(new ArrayList<>()));
+
+        // When
+        Page<WishlistDto> actual = wishlistService.getWishlistForCustomer(123L,
+                PageRequest.of(0, 10));
+
+        // Then
+        assertTrue(actual.isEmpty());
     }
 
 }
