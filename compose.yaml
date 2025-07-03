@@ -25,6 +25,10 @@ services:
       - "9200:9200"
     networks:
       - elk
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9200/_cluster/health" ]
+      interval: 10s
+      retries: 5
 
   logstash:
     image: 'docker.elastic.co/logstash/logstash:8.13.0'
@@ -37,8 +41,13 @@ services:
     networks:
       - elk
     ports:
-      - "5000:5000"  # for TCP input if needed
       - "9600:9600"  # Logstash monitoring API
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9600" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
 
   kibana:
     image: 'docker.elastic.co/kibana/kibana:8.13.0'
@@ -57,3 +66,4 @@ volumes:
 
 networks:
   elk:
+    driver: bridge
