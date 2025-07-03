@@ -90,7 +90,6 @@ Optional Future Integrations:
 ```
 src-main-package/
 ├── api/              # API endpoints
-├── dao/              # Data Access and Modify Layer
 ├── dto/              # Data Transfer Objects
 ├── entity/           # Entities
 ├── repository/       # Spring Data Repositories

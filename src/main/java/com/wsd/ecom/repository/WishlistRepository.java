@@ -1,6 +1,9 @@
 package com.wsd.ecom.repository;
 
 import com.wsd.ecom.entity.Wishlist;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,4 +14,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WishlistRepository extends BaseRepository<Wishlist> {
+
+    @Query("""
+            select new com.wsd.ecom.dto.WishlistDto(w.customerId, p.name, p.price, p.id) from Wishlist w
+            inner join Product p on w.productId = p.id
+            where w.customerId = :customerId
+""")
+    Page<Wishlist> findWishlistByCustomerId(Long customerId, Pageable pageable);
 }
