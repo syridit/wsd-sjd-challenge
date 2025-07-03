@@ -1,5 +1,6 @@
 package com.wsd.ecom.service;
 
+import com.wsd.ecom.dto.WishlistDto;
 import com.wsd.ecom.entity.Wishlist;
 import com.wsd.ecom.repository.WishlistRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class WishlistService {
         this.wishlistRepository = wishlistRepository;
     }
 
-    public Page<Wishlist> getWishlistForCustomer(Long customerId, Pageable pageable) {
+    public Page<WishlistDto> getWishlistForCustomer(Long customerId, Pageable pageable) {
         //ToDo implement after unit test
         return new PageImpl<>(new ArrayList<>());
     }

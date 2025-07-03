@@ -1,5 +1,6 @@
 package com.wsd.ecom.service;
 
+import com.wsd.ecom.dto.WishlistDto;
 import com.wsd.ecom.entity.Product;
 import com.wsd.ecom.entity.Wishlist;
 import com.wsd.ecom.repository.WishlistRepository;
@@ -40,18 +41,17 @@ public class WishlistServiceTest {
     void shouldReturnWishlistForCustomer() {
         // Given
         Long customerId = 123L;
-        List<Wishlist> expectedWishlist = List.of(
-                new Wishlist(123L, 456L),
-                new Wishlist(123L, 789L)
+        List<WishlistDto> expectedWishlist = List.of(
+                WishlistDto.builder().customerId(customerId).productId(456L).build()
         );
 
-        Page<Wishlist> pageResponse = new PageImpl<>(expectedWishlist);
+        Page<WishlistDto> pageResponse = new PageImpl<>(expectedWishlist);
 
         when(wishlistRepository.findWishlistByCustomerId(eq(customerId), any(Pageable.class)))
                 .thenReturn(pageResponse);
 
         // When
-        Page<Wishlist> actual = wishlistService.getWishlistForCustomer(customerId,
+        Page<WishlistDto> actual = wishlistService.getWishlistForCustomer(customerId,
                 PageRequest.of(0, 10));
 
         // Then

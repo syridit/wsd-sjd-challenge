@@ -1,5 +1,6 @@
 package com.wsd.ecom.repository;
 
+import com.wsd.ecom.dto.WishlistDto;
 import com.wsd.ecom.entity.Wishlist;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,5 +21,5 @@ public interface WishlistRepository extends BaseRepository<Wishlist> {
             inner join Product p on w.productId = p.id
             where w.customerId = :customerId
 """)
-    Page<Wishlist> findWishlistByCustomerId(Long customerId, Pageable pageable);
+    Page<WishlistDto> findWishlistByCustomerId(Long customerId, Pageable pageable);
 }
