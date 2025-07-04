@@ -16,10 +16,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TopSellingProductInfo {
+public class TopSellingProductByQuantityDto {
 
     Long productId;
     String productName;
-    BigDecimal totalSales;
+    Long totalCount;
 
 }

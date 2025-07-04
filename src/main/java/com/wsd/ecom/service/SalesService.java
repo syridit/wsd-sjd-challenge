@@ -2,16 +2,11 @@ package com.wsd.ecom.service;
 
 import com.wsd.ecom.dto.MaxSaleDayDto;
 import com.wsd.ecom.dto.SalesTodayDto;
-import com.wsd.ecom.dto.TopSellingProductInfo;
-import com.wsd.ecom.dto.WishlistDto;
+import com.wsd.ecom.dto.TopSellingProductByAmountDto;
 import com.wsd.ecom.repository.SalesRepository;
-import com.wsd.ecom.repository.WishlistRepository;
-import com.wsd.ecom.util.AppUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -57,7 +52,7 @@ public class SalesService {
     }
 
 
-    public List<TopSellingProductInfo> getAllTimeTopFiveProductsBySalesAmount() {
+    public List<TopSellingProductByAmountDto> getAllTimeTopFiveProductsBySalesAmount() {
         return salesRepository.findTopSellingProductsByAmount(Pageable.ofSize(5));
     }
 

@@ -1,6 +1,6 @@
 package com.wsd.ecom.api;
 
-import com.wsd.ecom.dto.TopSellingProductInfo;
+import com.wsd.ecom.dto.TopSellingProductByAmountDto;
 import com.wsd.ecom.service.SalesService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +37,12 @@ public class ProductControllerTest extends BaseControllerTest {
 
     @Test
     void shouldReturnTop5SellingProductsAllTime() throws Exception {
-        List<TopSellingProductInfo> expectedList = List.of(
-                TopSellingProductInfo.builder().productId(1L).totalSales(new BigDecimal("1200.00")).build(),
-                TopSellingProductInfo.builder().productId(2L).totalSales(new BigDecimal("1100.00")).build(),
-                TopSellingProductInfo.builder().productId(3L).totalSales(new BigDecimal("1000.00")).build(),
-                TopSellingProductInfo.builder().productId(4L).totalSales(new BigDecimal("900.00")).build(),
-                TopSellingProductInfo.builder().productId(5L).totalSales(new BigDecimal("800.00")).build()
+        List<TopSellingProductByAmountDto> expectedList = List.of(
+                TopSellingProductByAmountDto.builder().productId(1L).totalSales(new BigDecimal("1200.00")).build(),
+                TopSellingProductByAmountDto.builder().productId(2L).totalSales(new BigDecimal("1100.00")).build(),
+                TopSellingProductByAmountDto.builder().productId(3L).totalSales(new BigDecimal("1000.00")).build(),
+                TopSellingProductByAmountDto.builder().productId(4L).totalSales(new BigDecimal("900.00")).build(),
+                TopSellingProductByAmountDto.builder().productId(5L).totalSales(new BigDecimal("800.00")).build()
         );
 
         when(salesService.getAllTimeTopFiveProductsBySalesAmount())

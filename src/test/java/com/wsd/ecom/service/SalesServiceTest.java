@@ -2,7 +2,7 @@ package com.wsd.ecom.service;
 
 import com.wsd.ecom.dto.MaxSaleDayDto;
 import com.wsd.ecom.dto.SalesTodayDto;
-import com.wsd.ecom.dto.TopSellingProductInfo;
+import com.wsd.ecom.dto.TopSellingProductByAmountDto;
 import com.wsd.ecom.repository.SalesRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -95,13 +95,13 @@ public class SalesServiceTest {
     @Test
     void shouldReturnEmptyAllTimeTopFiveProductListBasedOnSalesAmount() {
         // Given
-        List<TopSellingProductInfo> expectedList = new ArrayList<>();
+        List<TopSellingProductByAmountDto> expectedList = new ArrayList<>();
 
         when(salesRepository.findTopSellingProductsByAmount(eq(Pageable.ofSize(5))))
                 .thenReturn(expectedList);
 
         // When
-        List<TopSellingProductInfo> actual = salesService.getAllTimeTopFiveProductsBySalesAmount();
+        List<TopSellingProductByAmountDto> actual = salesService.getAllTimeTopFiveProductsBySalesAmount();
 
         // Then
         assertTrue(actual.isEmpty());
@@ -110,19 +110,19 @@ public class SalesServiceTest {
     @Test
     void shouldReturnAllTimeTopFiveProductListBasedOnSalesAmount() {
         // Given
-        List<TopSellingProductInfo> expectedList = List.of(
-                TopSellingProductInfo.builder().productId(1L).totalSales(new BigDecimal("1200.00")).build(),
-                TopSellingProductInfo.builder().productId(2L).totalSales(new BigDecimal("1100.00")).build(),
-                TopSellingProductInfo.builder().productId(3L).totalSales(new BigDecimal("1000.00")).build(),
-                TopSellingProductInfo.builder().productId(4L).totalSales(new BigDecimal("900.00")).build(),
-                TopSellingProductInfo.builder().productId(5L).totalSales(new BigDecimal("800.00")).build()
+        List<TopSellingProductByAmountDto> expectedList = List.of(
+                TopSellingProductByAmountDto.builder().productId(1L).totalSales(new BigDecimal("1200.00")).build(),
+                TopSellingProductByAmountDto.builder().productId(2L).totalSales(new BigDecimal("1100.00")).build(),
+                TopSellingProductByAmountDto.builder().productId(3L).totalSales(new BigDecimal("1000.00")).build(),
+                TopSellingProductByAmountDto.builder().productId(4L).totalSales(new BigDecimal("900.00")).build(),
+                TopSellingProductByAmountDto.builder().productId(5L).totalSales(new BigDecimal("800.00")).build()
         );
 
         when(salesRepository.findTopSellingProductsByAmount(eq(Pageable.ofSize(5))))
                 .thenReturn(expectedList);
 
         // When
-        List<TopSellingProductInfo> actual = salesService.getAllTimeTopFiveProductsBySalesAmount();
+        List<TopSellingProductByAmountDto> actual = salesService.getAllTimeTopFiveProductsBySalesAmount();
 
         // Then
         assertThat(actual.size()).isEqualTo(5);
@@ -131,16 +131,16 @@ public class SalesServiceTest {
     @Test
     void shouldReturnPartialAllTimeTopFiveProductListBasedOnSalesAmount() {
         // Given
-        List<TopSellingProductInfo> expectedList = List.of(
-                TopSellingProductInfo.builder().productId(1L).totalSales(new BigDecimal("1200.00")).build(),
-                TopSellingProductInfo.builder().productId(2L).totalSales(new BigDecimal("1100.00")).build()
+        List<TopSellingProductByAmountDto> expectedList = List.of(
+                TopSellingProductByAmountDto.builder().productId(1L).totalSales(new BigDecimal("1200.00")).build(),
+                TopSellingProductByAmountDto.builder().productId(2L).totalSales(new BigDecimal("1100.00")).build()
         );
 
         when(salesRepository.findTopSellingProductsByAmount(eq(Pageable.ofSize(5))))
                 .thenReturn(expectedList);
 
         // When
-        List<TopSellingProductInfo> actual = salesService.getAllTimeTopFiveProductsBySalesAmount();
+        List<TopSellingProductByAmountDto> actual = salesService.getAllTimeTopFiveProductsBySalesAmount();
 
         // Then
         assertThat(actual.size()).isEqualTo(2);

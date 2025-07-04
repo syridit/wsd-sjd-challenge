@@ -1,6 +1,6 @@
 package com.wsd.ecom.api;
 
-import com.wsd.ecom.dto.TopSellingProductInfo;
+import com.wsd.ecom.dto.TopSellingProductByAmountDto;
 import com.wsd.ecom.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +27,7 @@ public class ProductController {
     }
 
     @GetMapping("/top-selling/all-time")
-    public List<TopSellingProductInfo> getTopFiveProductsOfAllTime() {
+    public List<TopSellingProductByAmountDto> getTopFiveProductsOfAllTime() {
         return salesService.getAllTimeTopFiveProductsBySalesAmount();
     }
 
