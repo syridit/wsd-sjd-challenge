@@ -2,6 +2,8 @@ package com.wsd.ecom.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,6 +12,13 @@ import lombok.experimental.FieldDefaults;
  * @email syridit.prof@gmail.com
  * @since 03 July, 2025
  */
+
+@Table(
+        indexes = {
+        @Index(name = "idx_sales_product", columnList = "productId"),
+        @Index(name = "idx_sales_customer", columnList = "customerId"),
+        @Index(name = "idx_sales_created_at", columnList = "createdAt")
+})
 
 @EqualsAndHashCode(callSuper = true)
 @Entity

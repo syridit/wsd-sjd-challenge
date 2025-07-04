@@ -26,18 +26,18 @@ public interface SalesRepository extends BaseRepository<Sales> {
                 SELECT SUM(p.price * s.quantity)
                 FROM Sales s
                 INNER JOIN Product p ON s.productId = p.id
-                WHERE s.createdAt BETWEEN :start AND :end
+                WHERE s.createdAt >= :start AND s.createdAt < :end
             """)
     BigDecimal sumSalesAmountBetween(@Param("start") LocalDateTime start,
                                      @Param("end") LocalDateTime end);
 
 
     @Query("""
-                SELECT DATE(s.createdAt) AS saleDay
+                SELECT DATE(s.createdAt)
                 FROM Sales s
-                JOIN Product p ON s.productId = p.id
-                WHERE s.createdAt BETWEEN :start AND :end
-                GROUP BY saleDay
+                INNER JOIN Product p ON s.productId = p.id
+                WHERE s.createdAt >= :start AND s.createdAt < :end
+                GROUP BY DATE(s.createdAt)
                 ORDER BY SUM(p.price * s.quantity) DESC
                 LIMIT 1
             """)
@@ -61,7 +61,7 @@ public interface SalesRepository extends BaseRepository<Sales> {
                 )
                 FROM Sales s
                 INNER JOIN Product p ON s.productId = p.id
-                WHERE s.createdAt BETWEEN :start AND :end
+                WHERE s.createdAt >= :start AND s.createdAt < :end
                 GROUP BY p.id, p.name
                 ORDER BY SUM(s.quantity) DESC
             """)

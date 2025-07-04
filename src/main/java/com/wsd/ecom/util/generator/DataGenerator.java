@@ -1,5 +1,6 @@
 package com.wsd.ecom.util.generator;
 
+import com.wsd.ecom.dto.DataGenerationRequest;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,15 +27,12 @@ public class DataGenerator {
         this.wishlistGenerator = wishlistGenerator;
     }
 
-    public void generateData(int customerCount,
-                             int productCount,
-                             int salesCount,
-                             int wishListCount) {
+    public void generateData(DataGenerationRequest request) {
 
-        customerGenerator.generate(customerCount);
-        productGenerator.generate(productCount);
-        salesGenerator.generate(salesCount);
-        wishlistGenerator.generate(wishListCount);
+        customerGenerator.generate(request.getCustomerCount());
+        productGenerator.generate(request.getProductCount());
+        salesGenerator.generate(request.getSalesCount());
+        wishlistGenerator.generate(request.getWishlistCount());
 
     }
 }
