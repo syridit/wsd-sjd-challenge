@@ -37,6 +37,7 @@ public abstract class BaseEntity implements Serializable {
     LocalDateTime updatedAt;
 
     @Version
+    @Column(nullable = false)
     Long version;
 
 
