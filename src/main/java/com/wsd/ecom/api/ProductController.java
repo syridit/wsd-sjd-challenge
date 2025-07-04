@@ -1,0 +1,34 @@
+package com.wsd.ecom.api;
+
+import com.wsd.ecom.dto.TopSellingProductInfo;
+import com.wsd.ecom.service.SalesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+/**
+ * @author Md. Sadman Yasar Ridit
+ * @email syridit.prof@gmail.com
+ * @since 04 July, 2025
+ */
+
+@RestController
+@RequestMapping(value = "/api/products")
+public class ProductController {
+
+    private final SalesService salesService;
+
+    @Autowired
+    public ProductController(SalesService salesService) {
+        this.salesService = salesService;
+    }
+
+    @GetMapping("/top-selling/all-time")
+    public List<TopSellingProductInfo> getTopFiveProductsOfAllTime() {
+        return salesService.getAllTimeTopFiveProductsBySalesAmount();
+    }
+
+}
