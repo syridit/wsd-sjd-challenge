@@ -3,67 +3,80 @@ services:
     image: 'postgres:latest'
     environment:
       - 'POSTGRES_DB=ecommerce_db'
-      - 'POSTGRES_PASSWORD=ecommerce_user'
-      - 'POSTGRES_USER=ecommerce_pass'
+      - 'POSTGRES_PASSWORD=ecommerce_pass'
+      - 'POSTGRES_USER=ecommerce_user'
     ports:
       - '5432'
-  elasticsearch:
-    image: 'docker.elastic.co/elasticsearch/elasticsearch:8.13.0'
-    container_name: 'elasticsearch'
-    environment:
-      - 'discovery.type=single-node'
-      - 'xpack.security.enabled=false'
-      - 'xpack.security.transport.ssl.enabled=false'
-      - 'xpack.license.self_generated.type=basic'
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     volumes:
-      - 'esdata:/usr/share/elasticsearch/data'
+      - 'pgdata:/var/lib/postgresql/data'
+  redis:
+    image: 'redis:latest'
+    container_name: 'redis'
     ports:
-      - "9200:9200"
-    networks:
-      - elk
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9200/_cluster/health" ]
-      interval: 10s
-      retries: 5
-
-  logstash:
-    image: 'docker.elastic.co/logstash/logstash:8.13.0'
-    container_name: 'logstash'
+      - "6379:6379"
     volumes:
-      - './logstash:/usr/share/logstash/pipeline'
-      - './logs:/logs'  # Mount Spring Boot logs directory
-    depends_on:
-      - elasticsearch
-    networks:
-      - elk
-    ports:
-      - "9600:9600"  # Logstash monitoring API
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9600" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+      - 'redis-data:/data'
     restart: unless-stopped
 
-  kibana:
-    image: 'docker.elastic.co/kibana/kibana:8.13.0'
-    container_name: 'kibana'
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-    environment:
-      - 'ELASTICSEARCH_HOSTS=http://elasticsearch:9200'
-    networks:
-      - elk
+#  elasticsearch:
+#    image: 'docker.elastic.co/elasticsearch/elasticsearch:8.13.0'
+#    container_name: 'elasticsearch'
+#    environment:
+#      - 'discovery.type=single-node'
+#      - 'xpack.security.enabled=false'
+#      - 'xpack.security.transport.ssl.enabled=false'
+#      - 'xpack.license.self_generated.type=basic'
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    volumes:
+#      - 'esdata:/usr/share/elasticsearch/data'
+#    ports:
+#      - "9200:9200"
+#    networks:
+#      - elk
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://localhost:9200/_cluster/health" ]
+#      interval: 10s
+#      retries: 5
+#
+#  logstash:
+#    image: 'docker.elastic.co/logstash/logstash:8.13.0'
+#    container_name: 'logstash'
+#    volumes:
+#      - './logstash:/usr/share/logstash/pipeline'
+#      - './logs:/logs'  # Mount Spring Boot logs directory
+#    depends_on:
+#      - elasticsearch
+#    networks:
+#      - elk
+#    ports:
+#      - "9600:9600"  # Logstash monitoring API
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://localhost:9600" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
+#    restart: unless-stopped
+#
+#  kibana:
+#    image: 'docker.elastic.co/kibana/kibana:8.13.0'
+#    container_name: 'kibana'
+#    ports:
+#      - "5601:5601"
+#    depends_on:
+#      - elasticsearch
+#    environment:
+#      - 'ELASTICSEARCH_HOSTS=http://elasticsearch:9200'
+#    networks:
+#      - elk
 
 volumes:
-  esdata:
+#  esdata:
+  redis-data:
+  pgdata:
 
-networks:
-  elk:
-    driver: bridge
+#networks:
+#  elk:
+#    driver: bridge

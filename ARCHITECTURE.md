@@ -25,7 +25,7 @@ Considering the long term development potential, the system workflow can be list
               |                                |
               v                                v
 +-----------------------------+   +----------------------------+
-|   Service Layer (Business)  |---|    Cache / Kafka Clients   |
+|   Service Layer (Business)  |---|    Redis Cache             |
 +-----------------------------+   +----------------------------+
               |
               v
@@ -41,7 +41,7 @@ Considering the long term development potential, the system workflow can be list
 
 Optional Future Integrations:
 +-----------------------------+
-| Redis / Kafka / ELK Stack   |
+|           Kafka             |
 +-----------------------------+
 ```
 
@@ -117,8 +117,8 @@ services:
     image: 'postgres:latest'
     environment:
       - 'POSTGRES_DB=ecommerce_db'
-      - 'POSTGRES_PASSWORD=ecommerce_user'
-      - 'POSTGRES_USER=ecommerce_pass'
+      - 'POSTGRES_PASSWORD=ecommerce_pass'
+      - 'POSTGRES_USER=ecommerce_user'
     ports:
       - '5432'
 ```
@@ -136,8 +136,6 @@ spring.datasource.url=jdbc:postgresql://localhost:5432/ecommerce_db
 
 ## 9. Future Enhancements
 
-* Redis caching for top products
 * Kafka for async events like sale created, product inventory updates
-* ELK / Grafana Loki integration for log visualization
 * Authorization & Authentication (JWT or OAuth)
 * Rate limiting, filtering
