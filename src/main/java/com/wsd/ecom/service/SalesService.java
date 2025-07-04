@@ -2,6 +2,7 @@ package com.wsd.ecom.service;
 
 import com.wsd.ecom.dto.MaxSaleDayDto;
 import com.wsd.ecom.dto.SalesTodayDto;
+import com.wsd.ecom.dto.TopSellingProductInfo;
 import com.wsd.ecom.dto.WishlistDto;
 import com.wsd.ecom.repository.SalesRepository;
 import com.wsd.ecom.repository.WishlistRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Md. Sadman Yasar Ridit
@@ -53,4 +55,10 @@ public class SalesService {
                 .maxSalesDay(maxSalesDay)
                 .build();
     }
+
+
+    public List<TopSellingProductInfo> getAllTimeTopFiveProductsBySalesAmount() {
+        return salesRepository.findTopSellingProductsByAmount(Pageable.ofSize(5));
+    }
+
 }
