@@ -77,13 +77,13 @@ Optional Future Integrations:
 
 ## 4. API Endpoints (Planned)
 
-| Method | Endpoint                             | Description                         |
-| ------ |--------------------------------------| ----------------------------------- |
-| GET    | /customers/{id}/wishlist             | Return wishlist for a customer      |
-| GET    | /sales/today/total                   | Return total sale amount for today  |
-| GET    | /sales/max-sale-day?from=...\&to=... | Return max sale day in a range      |
-| GET    | /products/top-selling/all-time       | Top 5 products by total sale amount |
-| GET    | /products/top-selling/last-month     | Top 5 products by number of sales   |
+| Method | Endpoint                                     | Description                         |
+| ------ |----------------------------------------------| ----------------------------------- |
+| GET    | /customers/{id}/wishlist                     | Return wishlist for a customer      |
+| GET    | /sales/today/total                           | Return total sale amount for today  |
+| GET    | /sales/max-sale-day?from=...\&to=...         | Return max sale day in a range      |
+| GET    | /products/top-selling/all-time/by-amount     | Top 5 products by total sale amount |
+| GET    | /products/top-selling/last-month/by-quantity | Top 5 products by number of sales   |
 
 ## 5. Project Structure
 
