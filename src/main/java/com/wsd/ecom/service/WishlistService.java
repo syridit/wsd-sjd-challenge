@@ -4,6 +4,7 @@ import com.wsd.ecom.dto.WishlistDto;
 import com.wsd.ecom.repository.WishlistRepository;
 import com.wsd.ecom.util.AppUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,6 +23,7 @@ public class WishlistService {
     private final WishlistRepository wishlistRepository;
 
 
+    @Autowired
     public WishlistService(WishlistRepository wishlistRepository) {
         this.wishlistRepository = wishlistRepository;
     }
