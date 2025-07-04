@@ -1,9 +1,11 @@
 package com.wsd.ecom.repository;
 
-import com.wsd.ecom.dto.TopSellingProductInfo;
+import com.wsd.ecom.dto.TopSellingProductByAmountDto;
+import com.wsd.ecom.dto.TopSellingProductByQuantityDto;
 import com.wsd.ecom.entity.Sales;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -26,7 +28,8 @@ public interface SalesRepository extends BaseRepository<Sales> {
                 INNER JOIN Product p ON s.productId = p.id
                 WHERE s.createdAt BETWEEN :start AND :end
             """)
-    BigDecimal sumSalesAmountBetween(LocalDateTime start, LocalDateTime end);
+    BigDecimal sumSalesAmountBetween(@Param("start") LocalDateTime start,
+                                     @Param("end") LocalDateTime end);
 
 
     @Query("""
@@ -38,10 +41,11 @@ public interface SalesRepository extends BaseRepository<Sales> {
                 ORDER BY SUM(p.price * s.quantity) DESC
                 LIMIT 1
             """)
-    LocalDate findDayWithMaxSales(LocalDateTime start, LocalDateTime end);
+    LocalDate findDayWithMaxSales(@Param("start") LocalDateTime start,
+                                  @Param("end") LocalDateTime end);
 
     @Query("""
-                SELECT new com.wsd.ecom.dto.TopSellingProductInfo(
+                SELECT new com.wsd.ecom.dto.TopSellingProductByAmountDto(
                     p.id, p.name, SUM(p.price * s.quantity)
                 )
                 FROM Sales s
@@ -49,6 +53,20 @@ public interface SalesRepository extends BaseRepository<Sales> {
                 GROUP BY p.id, p.name
                 ORDER BY SUM(p.price * s.quantity) DESC
             """)
-    List<TopSellingProductInfo> findTopSellingProductsByAmount(Pageable pageable);
+    List<TopSellingProductByAmountDto> findTopSellingProductsByAmount(Pageable pageable);
 
+    @Query("""
+                SELECT new com.wsd.ecom.dto.TopSellingProductByQuantityDto(
+                    p.id, p.name, SUM(s.quantity)
+                )
+                FROM Sales s
+                INNER JOIN Product p ON s.productId = p.id
+                WHERE s.createdAt BETWEEN :start AND :end
+                GROUP BY p.id, p.name
+                ORDER BY SUM(s.quantity) DESC
+            """)
+    List<TopSellingProductByQuantityDto> findTopSellingProductsByQuantity(
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            Pageable pageable);
 }
