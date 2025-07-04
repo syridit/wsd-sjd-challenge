@@ -111,4 +111,115 @@ public class SalesRepositoryTest extends DatabaseIntegrationTest {
         assertThat(totalPrice).isEqualTo(expectedPrice);
     }
 
+
+
+
+    @Test
+    void shouldReturnMaxSalesDayOfCertainDateRange() {
+        // Given
+        LocalDateTime today = LocalDateTime.now();
+
+        Customer alice = new Customer("Alice", "alice@example.com");
+        Customer bob = new Customer("Bob", "bob@example.com");
+        customerRepository.save(alice);
+        customerRepository.save(bob);
+
+        Product p1 = new Product("Keyboard", new BigDecimal("50"));
+        Product p2 = new Product("Monitor", new BigDecimal("150"));
+        Product p3 = new Product("Mouse", new BigDecimal("250"));
+        productRepository.save(p1);
+        productRepository.save(p2);
+        productRepository.save(p3);
+
+        Sales s1 = new Sales(p1.getId(), alice.getId(), 10L);
+        Sales s2 = new Sales(p1.getId(), bob.getId(), 20L);
+        Sales s3 = new Sales(p2.getId(), alice.getId(), 5L);
+        Sales s4 = new Sales(p3.getId(), bob.getId(), 1L);
+        Sales s5 = new Sales(p3.getId(), bob.getId(), 10L);
+        Sales s6 = new Sales(p3.getId(), bob.getId(), 2L);
+        Sales s7 = new Sales(p2.getId(), bob.getId(), 1L);
+        Sales s8 = new Sales(p1.getId(), bob.getId(), 1L);
+
+        salesRepository.save(s1);
+        salesRepository.save(s2);
+        salesRepository.save(s3);
+        salesRepository.save(s4);
+        salesRepository.save(s5);
+        salesRepository.save(s6);
+        salesRepository.save(s7);
+        salesRepository.save(s8);
+
+        s1.setCreatedAt(today.minusDays(2));
+        s3.setCreatedAt(today.minusDays(1));
+        s5.setCreatedAt(today.minusDays(3));
+        s8.setCreatedAt(today.minusDays(3));
+
+        salesRepository.save(s1);
+        salesRepository.save(s3);
+        salesRepository.save(s5);
+        salesRepository.save(s8);
+
+        LocalDate expectedDate = LocalDate.now().minusDays(3);
+
+        // When
+        LocalDate actual = salesRepository.findDayWithMaxSales(LocalDateTime.now().minusDays(5), LocalDateTime.now());
+
+        // Then
+        assertThat(actual).isEqualTo(expectedDate);
+    }
+    @Test
+    void shouldReturnNullWhenCertainDateRangeOutOfExistingData() {
+        // Given
+        LocalDateTime today = LocalDateTime.now();
+
+        Customer alice = new Customer("Alice", "alice@example.com");
+        Customer bob = new Customer("Bob", "bob@example.com");
+        customerRepository.save(alice);
+        customerRepository.save(bob);
+
+        Product p1 = new Product("Keyboard", new BigDecimal("50"));
+        Product p2 = new Product("Monitor", new BigDecimal("150"));
+        Product p3 = new Product("Mouse", new BigDecimal("250"));
+        productRepository.save(p1);
+        productRepository.save(p2);
+        productRepository.save(p3);
+
+        Sales s1 = new Sales(p1.getId(), alice.getId(), 10L);
+        Sales s2 = new Sales(p1.getId(), bob.getId(), 20L);
+        Sales s3 = new Sales(p2.getId(), alice.getId(), 5L);
+        Sales s4 = new Sales(p3.getId(), bob.getId(), 1L);
+        Sales s5 = new Sales(p3.getId(), bob.getId(), 10L);
+        Sales s6 = new Sales(p3.getId(), bob.getId(), 2L);
+        Sales s7 = new Sales(p2.getId(), bob.getId(), 1L);
+        Sales s8 = new Sales(p1.getId(), bob.getId(), 1L);
+
+        salesRepository.save(s1);
+        salesRepository.save(s2);
+        salesRepository.save(s3);
+        salesRepository.save(s4);
+        salesRepository.save(s5);
+        salesRepository.save(s6);
+        salesRepository.save(s7);
+        salesRepository.save(s8);
+
+        s1.setCreatedAt(today.minusDays(2));
+        s3.setCreatedAt(today.minusDays(1));
+        s5.setCreatedAt(today.minusDays(3));
+        s8.setCreatedAt(today.minusDays(3));
+
+        salesRepository.save(s1);
+        salesRepository.save(s3);
+        salesRepository.save(s5);
+        salesRepository.save(s8);
+
+
+        // When
+        LocalDate actual = salesRepository.findDayWithMaxSales(LocalDateTime.now().minusDays(10),
+                LocalDateTime.now().minusDays(7));
+
+        // Then
+        assertThat(actual).isNull();
+    }
+
+
 }

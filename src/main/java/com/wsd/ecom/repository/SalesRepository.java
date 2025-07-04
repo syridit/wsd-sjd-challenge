@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -23,5 +24,17 @@ public interface SalesRepository extends BaseRepository<Sales> {
                 WHERE s.createdAt BETWEEN :start AND :end
             """)
     BigDecimal sumSalesAmountBetween(LocalDateTime start, LocalDateTime end);
+
+
+    @Query("""
+                SELECT DATE(s.createdAt) AS saleDay
+                FROM Sales s
+                JOIN Product p ON s.productId = p.id
+                WHERE s.createdAt BETWEEN :start AND :end
+                GROUP BY saleDay
+                ORDER BY SUM(p.price * s.quantity) DESC
+                LIMIT 1
+            """)
+    LocalDate findDayWithMaxSales(LocalDateTime start, LocalDateTime end);
 
 }
