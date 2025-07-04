@@ -5,6 +5,7 @@ import com.wsd.ecom.repository.WishlistRepository;
 import com.wsd.ecom.util.AppUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,6 +29,7 @@ public class WishlistService {
         this.wishlistRepository = wishlistRepository;
     }
 
+    @Cacheable(value = "wishlist", key = "#customerId")
     public Page<WishlistDto> getWishlistForCustomer(Long customerId, Pageable pageable) {
         pageable = AppUtil.getSortingWithCreationTime(pageable, Sort.Direction.DESC);
         return wishlistRepository.findWishlistByCustomerId(customerId, pageable);

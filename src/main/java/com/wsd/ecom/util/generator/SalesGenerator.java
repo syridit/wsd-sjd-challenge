@@ -7,6 +7,7 @@ import com.wsd.ecom.repository.CustomerRepository;
 import com.wsd.ecom.repository.ProductRepository;
 import com.wsd.ecom.repository.SalesRepository;
 import net.datafaker.Faker;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class SalesGenerator {
         this.productRepo = productRepo;
     }
 
+    @CacheEvict(value = {"dailySale", "topProductsAllTime", "topProductsLastMonth", "maxSaleDay"}, allEntries = true)
     public void generate(int count) {
         List<Customer> customers = customerRepo.findAll();
         List<Product> products = productRepo.findAll();

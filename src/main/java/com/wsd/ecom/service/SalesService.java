@@ -7,6 +7,7 @@ import com.wsd.ecom.dto.TopSellingProductByQuantityDto;
 import com.wsd.ecom.repository.SalesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class SalesService {
         this.salesRepository = salesRepository;
     }
 
+    @Cacheable(value = "dailySale")
     public SalesTodayDto getTotalSalesAmountOfToday() {
         LocalDate today = LocalDate.now();
         BigDecimal totalSalesAmount = salesRepository.sumSalesAmountBetween(today.atStartOfDay(),
@@ -42,7 +44,7 @@ public class SalesService {
                 .build();
     }
 
-
+    @Cacheable(value = "maxSaleDay", key = "{#from.toString(), #to.toString()}")
     public MaxSaleDayDto getMaxSalesDay(LocalDateTime from, LocalDateTime to) {
         LocalDate maxSalesDay = salesRepository.findDayWithMaxSales(from, to);
         return MaxSaleDayDto.builder()
@@ -52,11 +54,12 @@ public class SalesService {
                 .build();
     }
 
-
+    @Cacheable(value = "topProductsAllTime")
     public List<TopSellingProductByAmountDto> getAllTimeTopFiveProductsBySalesAmount() {
         return salesRepository.findTopSellingProductsByAmount(Pageable.ofSize(5));
     }
 
+    @Cacheable(value = "topProductsAllTime")
     public List<TopSellingProductByQuantityDto> getLastMonthTopFiveProductsByQuantity() {
         LocalDateTime from = LocalDateTime.now().minusMonths(1).withDayOfMonth(1).toLocalDate().atStartOfDay();
         LocalDateTime to = LocalDateTime.now().withDayOfMonth(1).toLocalDate().atStartOfDay();
