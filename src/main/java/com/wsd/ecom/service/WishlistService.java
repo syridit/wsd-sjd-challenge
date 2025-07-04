@@ -31,6 +31,9 @@ public class WishlistService {
 
     @Cacheable(value = "wishlist", key = "#customerId")
     public Page<WishlistDto> getWishlistForCustomer(Long customerId, Pageable pageable) {
+        log.info("Getting wishlist for customer: {}, with pageable request.\n" +
+                "Page number is: {}, page size is: {}, sort: {}",
+                customerId, pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().isSorted());
         pageable = AppUtil.getSortingWithCreationTime(pageable, Sort.Direction.DESC);
         return wishlistRepository.findWishlistByCustomerId(customerId, pageable);
     }

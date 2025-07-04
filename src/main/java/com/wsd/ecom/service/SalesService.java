@@ -36,6 +36,7 @@ public class SalesService {
 
     @Cacheable(value = "dailySale")
     public SalesTodayDto getTotalSalesAmountOfToday() {
+        log.info("Getting total sales amount of today...");
         LocalDate today = LocalDate.now();
         BigDecimal totalSalesAmount = salesRepository.sumSalesAmountBetween(today.atStartOfDay(),
                 today.plusDays(1).atStartOfDay());
@@ -46,6 +47,7 @@ public class SalesService {
 
     @Cacheable(value = "maxSaleDay", key = "{#from.toString(), #to.toString()}")
     public MaxSaleDayDto getMaxSalesDay(LocalDateTime from, LocalDateTime to) {
+        log.info("Getting the day with max sales amount... within {} to {}", from.toString(), to.toString());
         LocalDate maxSalesDay = salesRepository.findDayWithMaxSales(from, to);
         return MaxSaleDayDto.builder()
                 .from(from)
@@ -56,13 +58,16 @@ public class SalesService {
 
     @Cacheable(value = "topProductsAllTime")
     public List<TopSellingProductByAmountDto> getAllTimeTopFiveProductsBySalesAmount() {
+        log.info("Getting top 5 selling products of all time based on sales amount.");
         return salesRepository.findTopSellingProductsByAmount(Pageable.ofSize(5));
     }
 
     @Cacheable(value = "topProductsAllTime")
     public List<TopSellingProductByQuantityDto> getLastMonthTopFiveProductsByQuantity() {
+        log.info("Getting top 5 selling products of last month based on sales quantity.");
         LocalDateTime from = LocalDateTime.now().minusMonths(1).withDayOfMonth(1).toLocalDate().atStartOfDay();
         LocalDateTime to = LocalDateTime.now().withDayOfMonth(1).toLocalDate().atStartOfDay();
+        log.info("Querying from {} to {}", from.toString(), to.toString());
         return salesRepository.findTopSellingProductsByQuantity(from, to,
                 Pageable.ofSize(5));
     }

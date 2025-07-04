@@ -6,8 +6,10 @@ import com.wsd.ecom.entity.Wishlist;
 import com.wsd.ecom.repository.CustomerRepository;
 import com.wsd.ecom.repository.ProductRepository;
 import com.wsd.ecom.repository.WishlistRepository;
+import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.stream.IntStream;
  */
 
 @Component
+@Slf4j
 public class WishlistGenerator {
 
     private final CustomerRepository customerRepo;
@@ -51,7 +54,14 @@ public class WishlistGenerator {
                 })
                 .toList();
 
-        repo.saveAllAndFlush(wishlists);
+        for (Wishlist wishlist : wishlists) {
+            try {
+                repo.saveAndFlush(wishlist);
+            } catch (DataIntegrityViolationException e) {
+                log.warn("Skipping duplicate entry: productId - {} and customerId - {}",
+                        wishlist.getProductId(), wishlist.getCustomerId());
+            }
+        }
 
         System.out.println("Current total wishlists: " + repo.count());
     }

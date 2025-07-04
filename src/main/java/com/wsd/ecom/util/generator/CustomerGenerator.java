@@ -1,8 +1,11 @@
 package com.wsd.ecom.util.generator;
 
 import com.wsd.ecom.entity.Customer;
+import com.wsd.ecom.entity.Wishlist;
 import com.wsd.ecom.repository.CustomerRepository;
+import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.stream.IntStream;
  */
 
 @Component
+@Slf4j
 public class CustomerGenerator {
 
     private final CustomerRepository repo;
@@ -29,7 +33,14 @@ public class CustomerGenerator {
                 .mapToObj(i -> new Customer(faker.name().fullName(), faker.internet().emailAddress()))
                 .toList();
 
-        repo.saveAllAndFlush(customers);
+        for (Customer customer : customers) {
+            try {
+                repo.saveAndFlush(customer);
+            } catch (DataIntegrityViolationException e) {
+                log.warn("Skipping duplicate entry: name - {} and email - {}",
+                        customer.getName(), customer.getEmail());
+            }
+        }
 
         System.out.println("Current total customers: " + repo.count());
     }
