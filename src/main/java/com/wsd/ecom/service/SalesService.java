@@ -3,6 +3,7 @@ package com.wsd.ecom.service;
 import com.wsd.ecom.dto.MaxSaleDayDto;
 import com.wsd.ecom.dto.SalesTodayDto;
 import com.wsd.ecom.dto.TopSellingProductByAmountDto;
+import com.wsd.ecom.dto.TopSellingProductByQuantityDto;
 import com.wsd.ecom.repository.SalesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,13 @@ public class SalesService {
 
     public List<TopSellingProductByAmountDto> getAllTimeTopFiveProductsBySalesAmount() {
         return salesRepository.findTopSellingProductsByAmount(Pageable.ofSize(5));
+    }
+
+    public List<TopSellingProductByQuantityDto> getLastMonthTopFiveProductsByQuantity() {
+        LocalDateTime from = LocalDateTime.now().minusMonths(1).withDayOfMonth(1).toLocalDate().atStartOfDay();
+        LocalDateTime to = LocalDateTime.now().withDayOfMonth(1).toLocalDate().atStartOfDay();
+        return salesRepository.findTopSellingProductsByQuantity(from, to,
+                Pageable.ofSize(5));
     }
 
 }
